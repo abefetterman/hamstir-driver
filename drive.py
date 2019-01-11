@@ -35,22 +35,23 @@ def main():
         with PiCamera(sensor_mode=4, framerate=30):
             with CameraInference(model) as inference:
                 for result in inference.run():
-                    lspeed,rspeed = result.tensors[0][0]
+                    data = [tensor.data for _,tensor in result.tensors.items()]
+                    lspeed,rspeed = data[0]
                     print('#%05d (%5.2f fps): %1.2f/%1.2f' %
                         (inference.count, inference.rate, lspeed, rspeed))
                     if lspeed < 0:
-                        left.reverse(-lspeed * args.speed)
+                        left.reverse(-max(-1,lspeed) * args.speed)
                     else:
-                        left.forward(lspeed * args.speed)
+                        left.forward(min(1,lspeed) * args.speed)
                     if rspeed < 0:
-                        right.reverse(-rspeed * args.speed)
+                        right.reverse(-max(-1,rspeed) * args.speed)
                     else:
-                        right.forward(lspeed * args.speed)
+                        right.forward(min(1,rspeed) * args.speed)
     
-    except:
+    except Exception as e: 
         left.stop()
         right.stop()
-        print('bye')
+        print(e)
 
 
 if __name__ == '__main__':
