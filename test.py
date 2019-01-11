@@ -28,9 +28,9 @@ def main():
     if args.test_file:
         with ImageInference(model) as inference:
             image = Image.open(args.test_file)
-            for result in inference.run(image):
-                print('#%05d (%5.2f fps): %s' %
-                    (inference.count, inference.rate, tensors_info(result.tensors)))
+            result = inference.run(image)
+            print(tensors_info(result.tensors))
+        return
 
     with PiCamera(sensor_mode=4, framerate=30):
         with CameraInference(model) as inference:
