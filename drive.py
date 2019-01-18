@@ -18,7 +18,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--model_name', default='test_model', help='Model identifier.')
     parser.add_argument('--model_path', required=True, help='Path to model file.')
-    parser.add_argument('--speed', default=0.5, help='Reduction factor on speed')
+    parser.add_argument('--speed', default=0.5, type=float, help='Reduction factor on speed')
     args = parser.parse_args()
 
     model = ModelDescriptor(
